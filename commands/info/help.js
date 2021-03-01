@@ -18,7 +18,7 @@ module.exports = {
       let embed = new MessageEmbed()
         .setAuthor(command.name, bot.user.displayAvatarURL())
         .addField("Description", command.description || "Not Provided :(")
-        .addField("Usage", "`" + bot.preifx + command.usage + "`" || "Not Provied")
+        .addField("Usage", "`" + bot.prefix + command.usage + "`" || "Not Provied")
         .addField("Aliases", "`" + command.aliases + "`" || "No aliases")
         .setThumbnail(bot.user.displayAvatarURL())
         .setColor("GREEN")

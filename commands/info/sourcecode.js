@@ -1,9 +1,13 @@
+const Discord = require('discord.js')
 module.exports = {
-    name: "ping",
+    name: "sourcecode",
     category: "info",
-    usage: "ping",
-    description: "Returns latency and API ping",
+    usage: "sourcecode",
+    description: "Get a link to the source code of the bot",
     run: async (bot, message, args) => {
-       message.channel.send(`The source coe is located [here]().`)
+      let Embed = new Discord.MessageEmbed()
+        .setTitle(`Source code`)
+        .setDescription(`The source coe is located [here](https://github.com/kirjorjos/study-budys-bot).`)
+       message.channel.send(Embed)
     }
 }

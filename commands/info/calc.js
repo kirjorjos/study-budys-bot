@@ -14,13 +14,15 @@ module.exports = {
       let EMBED_COLOR = 1752220
       try {
       let result = c.exec(args.join(' '));
+      result = result.replace(/(?<=\d)(\()/g, "*$1")
       let embed = new Discord.MessageEmbed()
-                  .setTitle('Wolfram|Alpha')
+                  .setTitle('Default Claculator')
                   .addField('Question', args.join(' '))
                   .addField('Simple Answer', result)
                   .setColor(EMBED_COLOR)
                   .setFooter('Requested by: ' + message.author.tag);
       message.channel.send(embed);
+      console.log('library')
         } catch(e) {let query = args.join(' ');
           waApi.getShort(query)
               .then(data => {

@@ -1,18 +1,21 @@
 const keep_alive = require('./keep_alive.js')   //run bot a a webserver so repl keeps it alive
+const nocachefile = require('./handlers/nocache.js')
 const fs = require('fs');   //file manager access
 function nocache(module) {require("fs").watchFile(require("path").resolve(module), () => {delete require.cache[require.resolve(module)]})}
 nocache('./handlers/command.js')
 const Discord = require('discord.js');
-const bot = new Discord.Client();
+const bot = new Discord.Client({disableMentions: "everyone"});
 const token = process.env.TOKEN;
 bot.prefix = process.env.PREFIX;
+let jsonString = fs.readFileSync('./bugs.json');
+bot.bugs = JSON.parse(jsonString);
 const WIPCOMMANDS = process.env.WIPCOMMANDS;
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
 bot.queue = new Map()
 bot.owner = process.env.OWNER
-const jsonCommands = fs.readFileSync('./commandsuggestions.json')
-bot.commandsuggestions = JSON.parse(jsonCommands);
+jsonString = fs.readFileSync('./commandsuggestions.json')
+bot.commandsuggestions = JSON.parse(jsonString);
 
 require('./handlers/command.js')(bot)
 
@@ -37,7 +40,7 @@ bot.on("ready", async () => {
 bot.on("message", async message => {
   try {
     if (!message.guild) return;
-    if (!message.content.startsWith(bot.prefix)) return;
+    if (!message.content.startsWith(bot.prefix) && (!message.content.startsWith('<@!814685920183844924>'))) return;
     if (!message.author.bot)  {
 
     
@@ -46,7 +49,11 @@ bot.on("message", async message => {
     // If message.member is uncached, cache it.
     if (!message.member) message.member = await message.guild.fetchMember(message);
 
-    const args = message.content.slice(bot.prefix.length).trim().split(/ +/g);
+    if (message.content.startsWith(bot.prefix)) {
+      args = message.content.slice(bot.prefix.length).trim().split(/ +/g);
+    } else {
+      args = message.content.slice(23).trim().split(/ +/g);
+      }
     const cmd = args.shift().toLowerCase();
     const argsConst = args
 
@@ -62,7 +69,7 @@ bot.on("message", async message => {
     }
   } catch (e) {
     console.log(e.stack)
-    message.channel.send(`<@500682420723384321>, something went wrong you need to look into.`)
+    message.channel.send(`<@814685920183844924>, something went wrong you need to look into.`)
   }
 });
 
